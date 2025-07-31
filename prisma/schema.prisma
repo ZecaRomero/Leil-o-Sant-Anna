@@ -1,0 +1,208 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      String   @default("USER")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  animals    Animal[]
+  costs      Cost[]
+  alerts     Alert[]
+  saleEvents SaleEvent[]
+  sales      Sale[]
+
+  @@map("users")
+}
+
+model Animal {
+  id          String    @id @default(cuid())
+  brinco      String    @unique
+  serie       String?
+  nome        String?
+  raca        String?
+  sexo        String
+  dataNasc    DateTime?
+  peso        Float?
+  categoria   String?
+  status      String    @default("ATIVO")
+  observacoes String?
+  
+  // Campos genealógicos
+  pai         String?   // Nome do touro (pai)
+  mae         String?   // Nome da mãe
+  avoMaterno  String?   // Nome do avô materno
+  receptora   String?   // Nome da receptora (para FIV)
+  tipoCobertura String? // FIV, IA, MONTA_NATURAL
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Foreign Keys
+  userId      String
+
+  // Relations
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gestations  Gestation[]
+  costs       Cost[]
+  weights     Weight[]
+  sales       Sale[]
+
+  @@map("animals")
+}
+
+model Gestation {
+  id              String    @id @default(cuid())
+  dataCobertura   DateTime
+  dataPrevParto   DateTime
+  dataRealParto   DateTime?
+  touroId         String?
+  status          String    @default("GESTANTE")
+  observacoes     String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Foreign Keys
+  animalId        String
+
+  // Relations
+  animal          Animal    @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@map("gestations")
+}
+
+model Weight {
+  id        String   @id @default(cuid())
+  peso      Float
+  data      DateTime
+  createdAt DateTime @default(now())
+
+  // Foreign Keys
+  animalId  String
+
+  // Relations
+  animal    Animal   @relation(fields: [animalId], references: [id], onDelete: Cascade)
+
+  @@map("weights")
+}
+
+model Cost {
+  id          String   @id @default(cuid())
+  tipo        String   // ALIMENTACAO, VETERINARIO, MEDICAMENTO, VENDA, etc
+  descricao   String
+  valor       Float
+  data        DateTime
+  categoria   String?
+  observacoes String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign Keys
+  userId      String
+  animalId    String?
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  animal      Animal?  @relation(fields: [animalId], references: [id], onDelete: SetNull)
+
+  @@map("costs")
+}
+
+model Alert {
+  id          String   @id @default(cuid())
+  tipo        String   // VACINA, PARTO, PESO, etc
+  titulo      String
+  descricao   String
+  data        DateTime
+  status      String   @default("PENDENTE")
+  prioridade  String   @default("MEDIA")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign Keys
+  userId      String
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("alerts")
+}
+
+model MarketPrice {
+  id        String   @id @default(cuid())
+  produto   String   // BOI_GORDO, BEZERRO, etc
+  preco     Float
+  unidade   String   // KG, CABECA
+  mercado   String   // LOCAL, NACIONAL
+  data      DateTime
+  fonte     String?
+  createdAt DateTime @default(now())
+
+  @@map("market_prices")
+}
+
+model SaleEvent {
+  id          String   @id @default(cuid())
+  nome        String
+  tipo        String   // LEILAO, VENDA_DIRETA, FEIRA, etc
+  data        DateTime
+  local       String?
+  descricao   String?
+  comissao    Float?   // Percentual de comissão
+  taxas       Float?   // Taxas fixas do evento
+  observacoes String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Foreign Keys
+  userId      String
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sales       Sale[]
+
+  @@map("sale_events")
+}
+
+model Sale {
+  id            String    @id @default(cuid())
+  valor         Float
+  dataVenda     DateTime
+  comprador     String?
+  documento     String?   // CPF/CNPJ do comprador
+  telefone      String?
+  endereco      String?
+  formaPagamento String?  // DINHEIRO, PIX, BOLETO, etc
+  observacoes   String?
+  comissao      Float?    // Valor da comissão
+  taxas         Float?    // Taxas da venda
+  valorLiquido  Float?    // Valor após descontos
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Foreign Keys
+  animalId      String
+  userId        String
+  saleEventId   String?
+
+  // Relations
+  animal        Animal    @relation(fields: [animalId], references: [id], onDelete: Cascade)
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  saleEvent     SaleEvent? @relation(fields: [saleEventId], references: [id], onDelete: SetNull)
+
+  @@map("sales")
+}

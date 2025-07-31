@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fundo circular -->
+  <circle cx="128" cy="128" r="120" fill="#2563eb" stroke="#1d4ed8" stroke-width="4"/>
+  
+  <!-- Cabeça do boi -->
+  <ellipse cx="128" cy="110" rx="45" ry="35" fill="#8b4513"/>
+  
+  <!-- Chifres -->
+  <path d="M85 85 Q75 75 70 65" stroke="#654321" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M171 85 Q181 75 186 65" stroke="#654321" stroke-width="6" fill="none" stroke-linecap="round"/>
+  
+  <!-- Orelhas -->
+  <ellipse cx="95" cy="100" rx="12" ry="20" fill="#654321" transform="rotate(-20 95 100)"/>
+  <ellipse cx="161" cy="100" rx="12" ry="20" fill="#654321" transform="rotate(20 161 100)"/>
+  
+  <!-- Olhos -->
+  <circle cx="115" cy="105" r="6" fill="#000"/>
+  <circle cx="141" cy="105" r="6" fill="#000"/>
+  <circle cx="117" cy="103" r="2" fill="#fff"/>
+  <circle cx="143" cy="103" r="2" fill="#fff"/>
+  
+  <!-- Focinho -->
+  <ellipse cx="128" cy="125" rx="15" ry="10" fill="#654321"/>
+  <ellipse cx="128" cy="125" rx="12" ry="7" fill="#8b4513"/>
+  
+  <!-- Narinas -->
+  <ellipse cx="123" cy="125" rx="2" ry="3" fill="#000"/>
+  <ellipse cx="133" cy="125" rx="2" ry="3" fill="#000"/>
+  
+  <!-- Corpo/Gráfico -->
+  <rect x="60" y="150" width="136" height="80" rx="8" fill="#fff" opacity="0.9"/>
+  
+  <!-- Gráfico de barras representando dados -->
+  <rect x="75" y="180" width="12" height="30" fill="#10b981"/>
+  <rect x="95" y="170" width="12" height="40" fill="#3b82f6"/>
+  <rect x="115" y="160" width="12" height="50" fill="#8b5cf6"/>
+  <rect x="135" y="175" width="12" height="35" fill="#f59e0b"/>
+  <rect x="155" y="165" width="12" height="45" fill="#ef4444"/>
+  <rect x="175" y="185" width="12" height="25" fill="#06b6d4"/>
+  
+  <!-- Texto "SYNC" -->
+  <text x="128" y="225" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#374151">SYNC</text>
+  
+  <!-- Elementos decorativos -->
+  <circle cx="45" cy="45" r="3" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="211" cy="45" r="3" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="45" cy="211" r="3" fill="#fbbf24" opacity="0.7"/>
+  <circle cx="211" cy="211" r="3" fill="#fbbf24" opacity="0.7"/>
+</svg>
